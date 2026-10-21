@@ -1,0 +1,31 @@
+Kernel Use License
+
+Copyright (c) 2026 marpusakethram. All rights reserved.
+
+You may download and run the packaged Kernel MCP server (the files in the
+Releases of this repository), and use the hosted Kernel tool you have been
+given access to, for your own technical due diligence and evaluation of
+companies.
+
+You may not, without the author's prior written permission:
+
+- copy, redistribute, publish, sublicense, sell or host Kernel, in whole or in
+  part, including as a service for others;
+- modify it or create derivative works from it;
+- decompile, disassemble, deobfuscate or otherwise reverse engineer it, or
+  try to extract its source code, scoring method or parameters;
+- use it, its output format or its documentation to build a competing product.
+
+This repository contains documentation and screenshots only. The source code
+is private and no license to it is granted.
+
+Third-party components keep their own licenses. In particular, the tree-sitter
+language grammars shipped in the release (public/wasm) are MIT-licensed by
+their respective authors.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE. Kernel's scores are one input
+to diligence and are not investment advice.
