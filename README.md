@@ -113,7 +113,7 @@ The score is a relative ranking, not an absolute grade, and one input to diligen
 
 ## The hosted app, for your whole team
 
-Not everyone lives in a terminal. The same engine runs in the browser at **https://kernel-diligence.vercel.app**, with access approved by hand. It checks repos in your browser tab, lists them in a table, and turns any check into a one-page partner memo.
+Not everyone lives in a terminal. The same engine runs in the browser at **https://kernel-diligence.vercel.app**, with access approved by hand. It checks repos in your browser tab (paste several at once), ranks them in a table, and turns any check into a one-page partner memo: the verdict at a glance, whether it's an AI wrapper, how fast it could be copied, strengths against risks, and the next diligence steps. Your checks and memo notes are saved to your account, and only scores and file names are saved, never the code. The Checks table works as a pipeline: filter by your Move ahead / Dig deeper / Pass decision, export to CSV, and see how a company's score moved since you last checked it. From a memo you can email the founder questions in one click, or share a read-only link with another approved partner.
 
 ![Walkthrough: request access, then check a repo and read the verdict](docs/walkthrough.gif)
 
@@ -125,7 +125,7 @@ Not everyone lives in a terminal. The same engine runs in the browser at **https
 | --- | --- |
 | ![Partner memo](docs/screenshots/app-memo.png) | ![Request access](docs/screenshots/access-request.png) |
 
-The owner approves requests in a live queue, and approved people get a one-time sign-in link by email. There are no passwords.
+The owner approves requests in a queue, and approved people get a one-time sign-in link by email. Partners never need a password. The hosted app runs on React, Rails and Postgres.
 
 | Approvals | After approving |
 | --- | --- |
