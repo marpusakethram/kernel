@@ -1,130 +1,63 @@
 # Kernel
 
-**Diligence on code you can't share.**
+**Is this startup's code real engineering, or a wrapper? Ask your agent.**
 
-Kernel is a tool for investors and accelerators. It reads a startup's repositories inside your own browser or agent, private ones included, and scores how much of the code is real engineering and how much is scaffolding or calls to someone else's API. You get a score out of 100, a one-line verdict, and the exact files behind it. The code never leaves your machine.
+Kernel is a technical due diligence tool for investors. It reads a startup's repository on your machine, private ones included, and tells you how much of it is real engineering and how much is scaffolding or calls to someone else's API: a score out of 100, a one-line verdict, the files where the real work lives, and the questions to put to the founders. A typical repo takes a few seconds. The code never leaves your machine.
 
-**Use it:** https://kernel-diligence.vercel.app (access is approved by hand), or [add it to your AI agent](#add-kernel-to-your-agent).
+## Install in Claude Code
 
-![The Kernel report for a sample repository](docs/screenshots/app-report.png)
+```text
+/plugin install kernel --marketplace marpusakethram/kernel
+```
 
-This repository is the **showcase**: what Kernel does, how to use it, and how to add it to an agent. It is not the source code, which is private. See [what's here](#whats-here-and-whats-not).
+On older Claude Code versions, use two lines:
 
----
+```text
+/plugin marketplace add marpusakethram/kernel
+/plugin install kernel@kernel
+```
 
-## See it work
+Then check it:
 
-The whole user journey, from the first request to the verdict. This is the real tool checking one of its built-in sample repositories.
+```text
+/kernel:doctor
+```
 
-![Walkthrough: request access, then check a repo and read the verdict](docs/walkthrough.gif)
+You should see `Kernel doctor: PASS`. Kernel needs **Node 18 or newer**, and nothing else: no API keys, no account, no server.
 
-### 1. Request access
+## Use it
 
-You send your name, firm and role. The owner reviews every request personally. When you're approved, you get an email with a one-time sign-in link, and there are no passwords.
+Say to your agent:
 
-| Request | Received |
+- *"Audit github.com/acme/engine with Kernel."* or `/kernel:audit acme/engine`
+- *"Who has the better engine: acme/engine or rival/engine?"* or `/kernel:compare acme/engine rival/engine`
+- *"What should I ask the founders?"* or `/kernel:questions acme/engine`
+- *"Write the IC memo on acme versus its competitors."* or `/kernel:memo acme/engine rival/engine`
+- *"Show me what this file actually does."* or `/kernel:xray acme/engine src/core/solver.ts`
+
+| Command | What you get |
 | --- | --- |
-| ![Request access](docs/screenshots/access-request.png) | ![Request received](docs/screenshots/access-received.png) |
+| `/kernel:audit` | Verdict, Real Tech Score, Moat Score and grade, top engine files, red flags, founder questions |
+| `/kernel:compare` | Head-to-head on IP strength and engine quality, metric by metric |
+| `/kernel:questions` | Founder questions grounded in the actual code |
+| `/kernel:memo` | A one-page IC memo: proprietary vs rented, rebuild cost, risks, open questions |
+| `/kernel:xray` | One file, line by line: real logic, layout, data definitions, API relays, setup |
+| `/kernel:benchmarks` | Four built-in sample startups, one per verdict, to calibrate your eye |
+| `/kernel:doctor` | Checks the install by scoring the samples and confirming the order |
 
-### 2. Check a repo
+A target can be `owner/repo`, a GitHub URL (including `/tree/<branch>`), a local folder, a `.zip` or `.tar.gz`, or `benchmark:<wrapper|saas|crdt|vm>`.
 
-Paste a GitHub link, or upload a folder or zip. Checked repos are listed as a table with a verdict, a score, and a moat grade.
+## Works with GBrain
 
-![Checks](docs/screenshots/app-home.png)
+If [GBrain](https://github.com/garrytan/gbrain) is connected to your agent, `/kernel:audit` and `/kernel:memo` file their results on the company's page in your brain: the verdict, scores, red flags and founder questions, dated. The next time you ask your agent about that company, the technical read is already there. There's nothing to configure, and without GBrain the commands work exactly the same.
 
-### 3. Read the verdict
+## Private repos
 
-A plain-language verdict, the files where the real work lives, what looks dropped in, and the questions to put to the founders.
+Give Kernel a read-only GitHub token through its server's environment. In Claude Code, the simplest way is to start Claude Code with `GITHUB_TOKEN` set in your shell. Use a fine-grained token with read-only access to just the repos you're reviewing. The token is only ever sent to `api.github.com`, and repository contents are read into memory on your machine, never uploaded.
 
-![Report](docs/screenshots/app-report.png)
+## What an answer looks like
 
-### 4. Hand partners a memo
-
-Every check can become a one-page partner memo with your own recommendation on top. Print it, save it as a PDF, or paste it into an email.
-
-![Partner memo](docs/screenshots/app-memo.png)
-
-### For the owner: approvals
-
-New requests appear in a live queue with a count. Approving someone emails them their sign-in link.
-
-| Queue | After approving |
-| --- | --- |
-| ![Approvals](docs/screenshots/app-approvals.png) | ![After approving](docs/screenshots/access-admin-approved.png) |
-
-It also works on a phone:
-
-<img src="docs/screenshots/app-mobile-menu.png" alt="Kernel on a phone" width="260">
-
----
-
-## What the score means
-
-The Real Tech Score is how many of every 100 bytes of code are real engineering. Use it to rank startups against each other.
-
-| Score | Verdict | What it means |
-| --- | --- | --- |
-| 0 to 5 | **Wrapper** | Mostly glue and calls to someone else's API |
-| 5 to 20 | **Standard app** | Normal product code with little original engineering |
-| 20 to 50 | **Real engine** | A genuine technical core inside a normal app. Worth a deeper look |
-| 50 to 100 | **Deep tech** | Dense, original logic that is expensive to reproduce |
-
-Three things keep it honest:
-
-- **Names are erased before scoring**, so renaming variables can't move the number.
-- **Dropped-in code is flagged.** Clever code that nothing else in the product uses is called out and left out of the score.
-- **Nothing is uploaded.** Analysis runs on your machine.
-
-The score is a relative ranking, not an absolute grade, and one input to diligence rather than a verdict on a company. It is not investment advice.
-
----
-
-## Add Kernel to your agent
-
-Kernel also runs as an [MCP](https://modelcontextprotocol.io) server, so your AI agent can audit a repo for you on your own machine. It needs **Node 18 or newer** and nothing else.
-
-### 1. Download
-
-Get **`kernel-mcp-v1.1.0.zip`** from the [Releases](../../releases/latest) page and unzip it anywhere. Keep the `mcp` and `public` folders next to each other: Kernel loads its language parsers from `public`.
-
-Note the full path to `mcp/dist/kernel-mcp.mjs`. The examples below call it `/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs`. On Windows, forward slashes work everywhere, for example `C:/Tools/kernel/mcp/dist/kernel-mcp.mjs`.
-
-### 2. Add it to your client
-
-**Claude Code**
-
-```bash
-claude mcp add kernel -- node "/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs"
-```
-
-**Claude Desktop** (`claude_desktop_config.json`) and **Cursor** (`~/.cursor/mcp.json`)
-
-```json
-{
-  "mcpServers": {
-    "kernel": {
-      "command": "node",
-      "args": ["/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs"]
-    }
-  }
-}
-```
-
-**Codex** (`~/.codex/config.toml`)
-
-```toml
-[mcp_servers.kernel]
-command = "node"
-args = ["/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs"]
-```
-
-Windsurf, Zed and other MCP clients use the same command and arguments in their own MCP settings. Restart the client after editing its config.
-
-### 3. Ask it
-
-> Audit `benchmark:crdt` with Kernel.
-
-Kernel answers inside your agent. This is a real result, from a built-in sample repository:
+This is a real result from one of the built-in samples:
 
 ```text
 ## hyper-crdt-sync-engine
@@ -155,47 +88,80 @@ Real Tech Score 28/100 · Moat Score 48/100 (grade C) · IP strength 46 · Engin
 4. A strong team could rebuild the core in about 4 engineer-days. What makes it harder?
 ```
 
-(Abridged. The full result also lists the top engine files and more.)
+(Abridged. In Claude Code, your agent turns this into the short answer the command asks for.)
 
-### What you can ask for
+## What the score means
 
-| Tool | What it does |
+The Real Tech Score is how many of every 100 bytes of code are real engineering. Use it to rank startups against each other.
+
+| Score | Verdict | What it means |
+| --- | --- | --- |
+| 0 to 5 | **Wrapper** | Mostly glue and calls to someone else's API |
+| 5 to 20 | **Standard app** | Normal product code with little original engineering |
+| 20 to 50 | **Real engine** | A genuine technical core inside a normal app. Worth a deeper look |
+| 50 to 100 | **Deep tech** | Dense, original logic that is expensive to reproduce |
+
+Three things keep it honest:
+
+- **Names are erased before scoring**, so renaming variables can't move the number.
+- **Dropped-in code is flagged.** Clever code that nothing else in the product uses is called out and left out of the score.
+- **Nothing is uploaded.** Analysis runs on your machine.
+
+The score is a relative ranking, not an absolute grade, and one input to diligence rather than a verdict on a company. It is not investment advice.
+
+---
+
+## The hosted app, for your whole team
+
+Not everyone lives in a terminal. The same engine runs in the browser at **https://kernel-diligence.vercel.app**, with access approved by hand. It checks repos in your browser tab, lists them in a table, and turns any check into a one-page partner memo.
+
+![Walkthrough: request access, then check a repo and read the verdict](docs/walkthrough.gif)
+
+| Checks | Report |
 | --- | --- |
-| `audit_repository` | Verdict, score, moat grade, top engine files, red flags and founder questions |
-| `compare_repositories` | Head-to-head on IP strength and engine quality, metric by metric |
-| `xray_file` | One file, line by line: real logic, layout, data definitions, API relays, setup, comments |
-| `founder_questions` | Questions grounded in the actual code, for the founder meeting |
-| `run_benchmarks` | Score four built-in sample startups to see what each verdict looks like |
-| `explain_metrics` | Plain-language definitions of every number Kernel reports |
+| ![Checks](docs/screenshots/app-home.png) | ![Report](docs/screenshots/app-report.png) |
 
-A target can be `owner/repo`, a GitHub URL (including `/tree/<branch>`), a local folder, a `.zip` or `.tar.gz`, or `benchmark:<wrapper|saas|crdt|vm>` for the samples.
+| Partner memo | Request access |
+| --- | --- |
+| ![Partner memo](docs/screenshots/app-memo.png) | ![Request access](docs/screenshots/access-request.png) |
 
-### Private repositories
+The owner approves requests in a live queue, and approved people get a one-time sign-in link by email. There are no passwords.
 
-Set a read-only GitHub token in the server's environment:
+| Approvals | After approving |
+| --- | --- |
+| ![Approvals](docs/screenshots/app-approvals.png) | ![After approving](docs/screenshots/access-admin-approved.png) |
 
-```bash
-claude mcp add --transport stdio --env GITHUB_TOKEN=your_token_here kernel -- node "/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs"
+---
+
+## Other agents: Claude Desktop, Cursor, Codex, Windsurf, Zed
+
+Download **`kernel.zip`** from the [latest release](../../releases/latest) and unzip it anywhere, keeping the `mcp` and `public` folders together. Then point your client at the server:
+
+```json
+{
+  "mcpServers": {
+    "kernel": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs"],
+      "env": { "GITHUB_TOKEN": "optional, for private repos" }
+    }
+  }
+}
 ```
 
-In other clients, add an `env` block next to `command` and `args`: `"env": { "GITHUB_TOKEN": "your_token_here" }`.
+That goes in `claude_desktop_config.json` for Claude Desktop and `~/.cursor/mcp.json` for Cursor. For Codex, use `~/.codex/config.toml`:
 
-The token is only ever sent to `api.github.com`. Repository contents are read into memory on your machine and are not uploaded anywhere. Use a fine-grained token with read-only access to just the repos you're reviewing.
+```toml
+[mcp_servers.kernel]
+command = "node"
+args = ["/ABSOLUTE/PATH/kernel/mcp/dist/kernel-mcp.mjs"]
+```
 
----
-
-## Privacy and security
-
-- **Your code stays on your machine.** The hosted tool analyzes in your browser tab. The MCP server analyzes on your computer.
-- **The token is yours alone.** In the hosted tool it lives in that browser tab and is cleared when you close it.
-- **Access is by approval.** One request per email, reviewed by hand. Sign-in is a one-time emailed link, with no password to leak. Approval is checked live, so revoking someone locks them out right away.
-- **The site stores your access request and sign-in email**, and nothing about the code you check.
-
----
+On Windows, forward slashes work in the path, for example `C:/Tools/kernel/mcp/dist/kernel-mcp.mjs`. The server's tools are `audit_repository`, `compare_repositories`, `xray_file`, `founder_questions`, `run_benchmarks` and `explain_metrics`.
 
 ## What's here, and what's not
 
-This repository holds documentation and screenshots. The packaged MCP server is in the [Releases](../../releases). **The source code is private**, and the license lets you use Kernel but not copy, modify, redistribute or reverse engineer it. Read [LICENSE](LICENSE).
+This repository holds the documentation, the screenshots and the packaged tool: a minified MCP server, the open-source tree-sitter language parsers it uses, and the Claude Code commands. **The source code is private.** The license lets you use Kernel for your own diligence, but not copy, modify, redistribute or reverse engineer it. Read [LICENSE](LICENSE).
 
 ## Contact
 
@@ -203,4 +169,4 @@ Kernel is built and run by Saketh.
 
 - Email: [marpu.sr@gmail.com](mailto:marpu.sr@gmail.com)
 - GitHub: [@marpusakethram](https://github.com/marpusakethram)
-- To use the hosted tool: [request access](https://kernel-diligence.vercel.app)
+- Hosted app: [request access](https://kernel-diligence.vercel.app)

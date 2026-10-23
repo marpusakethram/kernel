@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "kernel": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/dist/kernel-mcp.mjs"]
+    }
+  }
+}

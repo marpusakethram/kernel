@@ -16,11 +16,12 @@ You may not, without the author's prior written permission:
   try to extract its source code, scoring method or parameters;
 - use it, its output format or its documentation to build a competing product.
 
-This repository contains documentation and screenshots only. The source code
-is private and no license to it is granted.
+This repository contains documentation, screenshots and the packaged tool (a
+minified MCP server, Claude Code commands and third-party language parsers).
+The source code is private and no license to it is granted.
 
 Third-party components keep their own licenses. In particular, the tree-sitter
-language grammars shipped in the release (public/wasm) are MIT-licensed by
+language grammars shipped here and in the releases (public/wasm) are MIT-licensed by
 their respective authors.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR

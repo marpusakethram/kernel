@@ -1,0 +1,15 @@
+{
+  "name": "kernel",
+  "description": "Kernel: technical due diligence on code you can't share.",
+  "owner": {
+    "name": "marpusakethram",
+    "url": "https://github.com/marpusakethram"
+  },
+  "plugins": [
+    {
+      "name": "kernel",
+      "source": "./",
+      "description": "Is a startup's code real engineering or a wrapper? Audit a repo, compare it with competitors, prep founder questions and write the IC memo, all on your machine."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "kernel",
+  "version": "1.2.0",
+  "description": "Technical due diligence for investors. Audit a startup's repo (private ones too), compare it with competitors on IP strength and engine quality, X-ray any file, get founder questions and write the IC memo. Runs locally; nothing is uploaded. Files results into GBrain when it's connected.",
+  "author": {
+    "name": "marpusakethram",
+    "url": "https://github.com/marpusakethram"
+  },
+  "homepage": "https://kernel-diligence.vercel.app",
+  "repository": "https://github.com/marpusakethram/kernel",
+  "license": "SEE LICENSE IN LICENSE",
+  "keywords": ["due-diligence", "venture", "investing", "code-analysis", "mcp", "gbrain"]
+}
