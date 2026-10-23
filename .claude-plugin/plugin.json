@@ -1,6 +1,6 @@
 {
   "name": "kernel",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Technical due diligence for investors. Audit a startup's repo (private ones too), compare it with competitors on IP strength and engine quality, X-ray any file, get founder questions and write the IC memo. Runs locally; nothing is uploaded. Files results into GBrain when it's connected.",
   "author": {
     "name": "marpusakethram",
